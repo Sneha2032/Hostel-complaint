@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Applications</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/student.css">
+</head>
+
+<body>
+
+<header class="header">
+    <div class="header-content">
+        <div class="logo-section">
+            <h1 class="logo">🏠 Hostel Admin</h1>
+        </div>
+
+        <nav class="menu">
+            <a href="/admin/dashboard" class="nav-link"><span class="nav-icon">📋</span><span>Complaints</span></a>
+            <a href="/admin/applications" class="nav-link"><span class="nav-icon">📝</span><span>Applications</span></a>
+            <a href="/admin/mess-dues" class="nav-link"><span class="nav-icon">💳</span><span>Mess Dues</span></a>
+        </nav>
+
+        <div class="header-right">
+            <div class="profile">
+                <div class="profile-avatar"><span>A</span></div>
+                <div class="profile-info">
+                    <div class="profile-name">Admin</div>
+                </div>
+                <a href="/admin/logout" class="logout-btn" title="Logout">🚪</a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="dashboard-container">
+
+    <div class="content-section">
+        <div class="section-header">
+            <h2 class="section-title"><span class="title-icon">📝</span>Applications</h2>
+            <a href="/admin/dashboard" class="btn-secondary">Back</a>
+        </div>
+
+        <table>
+            <tr>
+                <th>Student</th>
+                <th>Enroll</th>
+                <th>Type</th>
+                <th>Dates</th>
+                <th>Status</th>
+                <th>Remark</th>
+            </tr>
+
+            <% (applications||[]).forEach(a => { %>
+            <tr>
+                <td><%= a.studentName %></td>
+                <td><%= a.enrollment %></td>
+                <td><%= a.type %></td>
+                <td><%= a.fromDate || '-' %> → <%= a.toDate || '-' %></td>
+                <td>
+                    <form method="POST" action="/admin/update-application">
+                        <input type="hidden" name="id" value="<%= a._id %>">
+                        <select name="status">
+                            <option <%= a.status==="Pending"?"selected":"" %>>Pending</option>
+                            <option <%= a.status==="Approved"?"selected":"" %>>Approved</option>
+                            <option <%= a.status==="Rejected"?"selected":"" %>>Rejected</option>
+                        </select>
+                </td>
+                <td>
+                        <input name="adminRemark" placeholder="Remark">
+                        <button class="btn-primary">Update</button>
+                    </form>
+                </td>
+            </tr>
+            <% }) %>
+        </table>
+    </div>
+
+</main>
+
+</body>
+</html>

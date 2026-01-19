@@ -1,0 +1,152 @@
+/* ===== ADMIN HEADER ===== */
+.header {
+    background: #0b2c4d;
+    color: white;
+    padding: 18px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 22px;
+}
+
+/* LOGOUT BUTTON */
+.logout {
+    color: white;
+    text-decoration: none;
+    background: #c0392b;
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.logout:hover {
+    background: #a93226;
+}
+
+/* ===== MAIN CONTAINER ===== */
+.container {
+    padding: 30px;
+}
+
+.container h2 {
+    color: #0b2c4d;
+    margin-bottom: 20px;
+}
+
+/* ===== TABLE ===== */
+table {
+    width: 100%;
+    background: white;
+    border-collapse: collapse;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+th, td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: center;
+    font-size: 14px;
+}
+
+th {
+    background: #0b2c4d;
+    color: white;
+}
+
+tr:hover {
+    background: #f4f6f8;
+}
+
+/* ===== IMAGES ===== */
+table img {
+    width: 55px;
+    height: 55px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+/* ===== STATUS ===== */
+select {
+    padding: 6px;
+    border-radius: 5px;
+}
+
+/* ===== STATUS BADGES ===== */
+.badge {
+    display: inline-block;
+    margin-top: 6px;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.badge.pending {
+    background: #ffeaa7;
+    color: #d35400;
+}
+
+.badge.process {
+    background: #d6eaf8;
+    color: #2471a3;
+}
+
+.badge.solved {
+    background: #d4efdf;
+    color: #1e8449;
+}
+.add-form {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+}
+
+.add-form input,
+.add-form button {
+    padding: 10px;
+    font-size: 14px;
+}
+
+.add-form button {
+    background: #0b2c4d;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.add-form button:hover {
+    background: #08304f;
+}
+.filter-box {
+    margin-bottom: 20px;
+}
+
+.filter-box select {
+    padding: 8px;
+    font-size: 14px;
+}
+
+.hint {
+    color: #666;
+    font-size: 15px;
+}
+
+td.paid {
+    color: green;
+    font-weight: bold;
+}
+
+td.unpaid {
+    color: red;
+    font-weight: bold;
+}

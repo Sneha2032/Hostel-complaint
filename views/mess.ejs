@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mess Dues</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/student.css">
+</head>
+<body>
+
+<!-- HEADER (Same as dashboard) -->
+<header class="header">
+    <div class="header-content">
+        <div class="logo-section">
+            <h1 class="logo">🏠 Hostel Portal</h1>
+        </div>
+
+        <nav class="menu">
+            <a href="/mess" class="nav-link">
+                <span class="nav-icon">💳</span>
+                <span>Mess Dues</span>
+            </a>
+            <a href="/application" class="nav-link">
+                <span class="nav-icon">📝</span>
+                <span>Application</span>
+            </a>
+            <a href="/complaint" class="nav-link">
+                <span class="nav-icon">➕</span>
+                <span>New Complaint</span>
+            </a>
+        </nav>
+
+        <div class="header-right">
+            <a href="/dashboard" class="back-btn" title="Back to Dashboard">
+                <span>← Dashboard</span>
+            </a>
+            <a href="/logout" class="logout-btn" title="Logout">
+                <span>🚪</span>
+            </a>
+        </div>
+    </div>
+</header>
+
+<!-- CONTENT -->
+<main class="dashboard-container">
+    <div class="content-section">
+        <div class="section-header">
+            <h2 class="section-title">
+                <span class="title-icon">💳</span>
+                Mess & Hostel Fees
+            </h2>
+        </div>
+
+        <% if (!dues || dues.length === 0) { %>
+            <div class="empty-complaints">
+                <div class="empty-icon-large">💰</div>
+                <h3>No Mess Dues</h3>
+                <p>You don't have any mess dues at the moment.</p>
+            </div>
+        <% } else { %>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Semester</th>
+                            <th>Month</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% dues.forEach(d => { %>
+                            <tr>
+                                <td><%= d.semester %></td>
+                                <td><%= d.month %></td>
+                                <td class="amount">₹<%= d.amount %></td>
+                                <td>
+                                    <span class="status-badge <%= d.status === 'Paid' ? 'status-paid' : 'status-unpaid' %>">
+                                        <%= d.status === 'Paid' ? '✅' : '⏳' %>
+                                        <%= d.status %>
+                                    </span>
+                                </td>
+                                <td>
+                                    <% if (d.status === "Unpaid") { %>
+                                        <a href="/payment/<%= d._id %>" class="btn-primary btn-small">
+                                            Pay Now
+                                        </a>
+                                    <% } else { %>
+                                        <a href="/receipt/<%= d._id %>" class="btn-secondary btn-small">
+                                            Download Receipt
+                                        </a>
+                                    <% } %>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            </div>
+        <% } %>
+    </div>
+</main>
+
+</body>
+</html>

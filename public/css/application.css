@@ -1,0 +1,113 @@
+.page {
+    display: flex;
+    gap: 40px;
+    padding: 30px;
+    align-items: flex-start;
+}
+
+/* CARDS */
+.card {
+    background: white;
+    padding: 25px;
+    border-radius: 14px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    width: 360px;
+}
+
+.card.wide {
+    width: 100%;
+}
+
+/* HEADINGS */
+.card h2 {
+    margin-bottom: 18px;
+    color: #0b2c4d;
+}
+
+/* FORM */
+label {
+    font-weight: 600;
+    font-size: 14px;
+    display: block;
+    margin-bottom: 6px;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 14px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+
+textarea {
+    resize: none;
+    height: 90px;
+}
+
+.row {
+    display: flex;
+    gap: 12px;
+}
+
+.row div {
+    flex: 1;
+}
+
+/* BUTTON */
+button {
+    width: 100%;
+    background: #0b2c4d;
+    color: white;
+    padding: 11px;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #123b66;
+}
+
+/* TABLE */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+th, td {
+    padding: 12px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+    font-size: 14px;
+}
+
+th {
+    background: #0b2c4d;
+    color: white;
+}
+
+.empty {
+    padding: 20px;
+    font-style: italic;
+    color: #666;
+}
+
+/* STATUS COLORS */
+.pending {
+    color: #d35400;
+    font-weight: bold;
+}
+
+.approved, .solved {
+    color: #1e8449;
+    font-weight: bold;
+}
+
+.rejected {
+    color: #c0392b;
+    font-weight: bold;
+}

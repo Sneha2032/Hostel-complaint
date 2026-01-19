@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit Complaint</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/student.css">
+</head>
+
+<body>
+
+<!-- HEADER (Same as dashboard) -->
+<header class="header">
+    <div class="header-content">
+        <div class="logo-section">
+            <h1 class="logo">🏠 Hostel Portal</h1>
+        </div>
+
+        <nav class="menu">
+            <a href="/mess" class="nav-link">
+                <span class="nav-icon">💳</span>
+                <span>Mess Dues</span>
+            </a>
+            <a href="/application" class="nav-link">
+                <span class="nav-icon">📝</span>
+                <span>Application</span>
+            </a>
+            <a href="/complaint" class="nav-link">
+                <span class="nav-icon">➕</span>
+                <span>New Complaint</span>
+            </a>
+        </nav>
+
+        <div class="header-right">
+            <a href="/dashboard" class="back-btn" title="Back to Dashboard">
+                <span>← Dashboard</span>
+            </a>
+            <a href="/logout" class="logout-btn" title="Logout">
+                <span>🚪</span>
+            </a>
+        </div>
+    </div>
+</header>
+
+<!-- CONTENT -->
+<main class="dashboard-container">
+    <div class="content-section">
+        <div class="section-header">
+            <h2 class="section-title">
+                <span class="title-icon">📢</span>
+                Submit Complaint
+            </h2>
+        </div>
+
+        <div class="complaint-form-wrapper">
+            <form method="POST" action="/complaint" enctype="multipart/form-data" class="app-form">
+                <label class="form-label">Complaint Type</label>
+                <select name="type" required class="form-input">
+                    <option value="">-- Select --</option>
+                    <option>Water</option>
+                    <option>Electricity</option>
+                    <option>Cleanliness</option>
+                    <option>Other</option>
+                </select>
+
+                <label class="form-label">Description</label>
+                <textarea name="description" required class="form-input form-textarea" placeholder="Describe your complaint in detail..."></textarea>
+
+                <label class="form-label">Upload Photo (optional)</label>
+                <input type="file" name="photo" accept="image/*" class="form-input form-file">
+
+                <button type="submit" class="btn-primary">Submit Complaint</button>
+            </form>
+        </div>
+    </div>
+</main>
+
+</body>
+</html>

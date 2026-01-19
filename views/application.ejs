@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Applications</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/student.css">
+</head>
+
+<body>
+
+<!-- HEADER (Same as dashboard) -->
+<header class="header">
+    <div class="header-content">
+        <div class="logo-section">
+            <h1 class="logo">🏠 Hostel Portal</h1>
+        </div>
+
+        <nav class="menu">
+            <a href="/mess" class="nav-link">
+                <span class="nav-icon">💳</span>
+                <span>Mess Dues</span>
+            </a>
+            <a href="/application" class="nav-link">
+                <span class="nav-icon">📝</span>
+                <span>Application</span>
+            </a>
+            <a href="/complaint" class="nav-link">
+                <span class="nav-icon">➕</span>
+                <span>New Complaint</span>
+            </a>
+        </nav>
+
+        <div class="header-right">
+            <a href="/dashboard" class="back-btn" title="Back to Dashboard">
+                <span>← Dashboard</span>
+            </a>
+            <a href="/logout" class="logout-btn" title="Logout">
+                <span>🚪</span>
+            </a>
+        </div>
+    </div>
+</header>
+
+<!-- CONTENT -->
+<main class="dashboard-container">
+    <div class="application-page">
+        <!-- LEFT : FORM -->
+        <div class="application-form-card">
+            <h2 class="section-title">
+                <span class="title-icon">📝</span>
+                Submit Application
+            </h2>
+
+            <form method="POST" action="/application" class="app-form">
+                <label class="form-label">Application Type</label>
+                <select name="type" required class="form-input">
+                    <option value="">-- Select --</option>
+                    <option>Hostel Leave</option>
+                    <option>Mess Query</option>
+                </select>
+
+                <div class="date-row">
+                    <div>
+                        <label class="form-label">From Date</label>
+                        <input type="date" name="fromDate" class="form-input">
+                    </div>
+                    <div>
+                        <label class="form-label">To Date</label>
+                        <input type="date" name="toDate" class="form-input">
+                    </div>
+                </div>
+
+                <label class="form-label">Reason</label>
+                <textarea name="reason" required class="form-input form-textarea"></textarea>
+
+                <button type="submit" class="btn-primary">Submit Application</button>
+            </form>
+        </div>
+
+        <!-- RIGHT : TABLE -->
+        <div class="application-table-card">
+            <h2 class="section-title">
+                <span class="title-icon">📋</span>
+                My Applications
+            </h2>
+
+            <% if (applications.length === 0) { %>
+                <div class="empty-complaints">
+                    <div class="empty-icon-large">📭</div>
+                    <h3>No Applications</h3>
+                    <p>You haven't submitted any applications yet.</p>
+                </div>
+            <% } else { %>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>From</th>
+                                <th>To</th>
+                                <th>Status</th>
+                                <th>Admin Remark</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% applications.forEach(a => { %>
+                                <tr>
+                                    <td><%= a.type %></td>
+                                    <td><%= a.fromDate %></td>
+                                    <td><%= a.toDate %></td>
+                                    <td>
+                                        <span class="status-badge <%= 
+                                            a.status === 'Pending' ? 'status-pending' :
+                                            a.status === 'Approved' ? 'status-approved' : 'status-rejected'
+                                        %>">
+                                            <%= a.status === 'Pending' ? '⏳' : a.status === 'Approved' ? '✅' : '❌' %>
+                                            <%= a.status %>
+                                        </span>
+                                    </td>
+                                    <td><%= a.adminRemark || "-" %></td>
+                                </tr>
+                            <% }) %>
+                        </tbody>
+                    </table>
+                </div>
+            <% } %>
+        </div>
+    </div>
+</main>
+
+</body>
+</html>

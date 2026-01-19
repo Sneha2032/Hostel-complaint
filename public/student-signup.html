@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Registration</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/student-login.css">
+</head>
+
+<body>
+
+<div class="auth-page">
+    <div class="auth-bg" aria-hidden="true">
+        <div class="auth-orb orb-1"></div>
+        <div class="auth-orb orb-2"></div>
+        <div class="auth-orb orb-3"></div>
+    </div>
+
+    <main class="auth-card" role="main">
+        <a class="back-link" href="/" aria-label="Back to home">← Home</a>
+
+        <div class="auth-header">
+            <div class="auth-icon" aria-hidden="true">📝</div>
+            <h1 class="auth-title">Student Sign Up</h1>
+            <p class="auth-subtitle">Create your account to access the student portal.</p>
+        </div>
+
+        <!-- Backend unchanged: POST /signup with existing field names -->
+        <form class="auth-form" method="POST" action="/signup">
+            <label class="field">
+                <span class="label">Full Name</span>
+                <input type="text" name="name" placeholder="Your full name" required>
+            </label>
+
+            <label class="field">
+                <span class="label">Department</span>
+                <input type="text" name="dept" placeholder="CSE, ECE, etc." required>
+            </label>
+
+            <label class="field">
+                <span class="label">Course</span>
+                <select name="course" required>
+                    <option value="">Select Course</option>
+                    <option value="UG">UG</option>
+                    <option value="PG">PG</option>
+                </select>
+            </label>
+
+            <label class="field">
+                <span class="label">Admission Year</span>
+                <input
+                    type="number"
+                    name="admissionYear"
+                    placeholder="e.g. 2023"
+                    min="2000"
+                    max="2100"
+                    required
+                >
+            </label>
+
+            <label class="field">
+                <span class="label">Mobile Number</span>
+                <input type="text" name="mobile" placeholder="10-digit mobile" required>
+            </label>
+
+            <label class="field">
+                <span class="label">Email</span>
+                <input type="email" name="email" placeholder="you@example.com" required>
+            </label>
+
+            <label class="field">
+                <span class="label">Room Number</span>
+                <input type="text" name="room" placeholder="Room number" required>
+            </label>
+
+            <label class="field">
+                <span class="label">Enrollment Number</span>
+                <input type="text" name="enrollment" placeholder="Enrollment ID" required>
+            </label>
+
+            <label class="field">
+                <span class="label">Password</span>
+                <input type="password" name="password" placeholder="Create password" required>
+            </label>
+
+            <button class="primary-btn" type="submit">Register</button>
+        </form>
+
+        <p class="auth-footer">
+            Already registered?
+            <a class="link" href="/student-login.html">Login</a>
+        </p>
+    </main>
+</div>
+
+</body>
+</html>

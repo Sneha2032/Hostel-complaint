@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/student-login.css">
+</head>
+
+<body>
+
+<div class="auth-page">
+    <div class="auth-bg" aria-hidden="true">
+        <div class="auth-orb orb-1"></div>
+        <div class="auth-orb orb-2"></div>
+        <div class="auth-orb orb-3"></div>
+    </div>
+
+    <main class="auth-card" role="main">
+        <a class="back-link" href="/" aria-label="Back to home">← Home</a>
+
+        <div class="auth-header">
+            <div class="auth-icon" aria-hidden="true">👨‍💼</div>
+            <h1 class="auth-title">Admin Login</h1>
+            <p class="auth-subtitle">Welcome back — please sign in to manage the hostel.</p>
+        </div>
+
+        <!-- Backend unchanged: POST /admin/login with username + password -->
+        <form class="auth-form" method="POST" action="/admin/login">
+            <label class="field">
+                <span class="label">Admin Username</span>
+                <input type="text" name="username" placeholder="Enter username" autocomplete="username" required>
+            </label>
+
+            <label class="field">
+                <span class="label">Password</span>
+                <input type="password" name="password" placeholder="Your password" autocomplete="current-password" required>
+            </label>
+
+            <button class="primary-btn" type="submit">Login</button>
+        </form>
+    </main>
+</div>
+
+</body>
+</html>

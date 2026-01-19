@@ -1,0 +1,68 @@
+<head>
+    <title>Admin | Create Notice</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/student.css">
+</head>
+<body>
+
+<header class="header">
+    <div class="header-content">
+        <div class="logo-section">
+            <h1 class="logo">🏠 Hostel Admin</h1>
+        </div>
+
+        <nav class="menu">
+            <a href="/admin/dashboard" class="nav-link"><span class="nav-icon">📋</span><span>Complaints</span></a>
+            <a href="/admin/applications" class="nav-link"><span class="nav-icon">📝</span><span>Applications</span></a>
+            <a href="/admin/mess-dues" class="nav-link"><span class="nav-icon">💳</span><span>Mess Dues</span></a>
+            <a href="/admin/notice" class="nav-link"><span class="nav-icon">📢</span><span>Notices</span></a>
+        </nav>
+
+        <div class="header-right">
+            <div class="profile">
+                <div class="profile-avatar"><span>A</span></div>
+                <div class="profile-info">
+                    <div class="profile-name">Admin</div>
+                </div>
+                <a href="/admin/logout" class="logout-btn" title="Logout">🚪</a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="dashboard-container">
+    <div class="content-section">
+        <div class="section-header">
+            <h2 class="section-title"><span class="title-icon">📢</span>Create Notice</h2>
+            <a href="/admin/dashboard" class="btn-secondary">Back</a>
+        </div>
+
+        <div style="max-width: 600px; margin: 0 auto; text-align: center;">
+            <form method="POST" action="/admin/notice" style="display: flex; flex-direction: column; align-items: center; gap: 15px;">
+                <div style="width: 100%; text-align: left;">
+                    <label style="display: block; margin-bottom: 5px;">Notice Title</label>
+                    <input type="text" name="title" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                </div>
+
+                <div style="width: 100%; text-align: left;">
+                    <label style="display: block; margin-bottom: 5px;">Message</label>
+                    <textarea name="message" rows="5" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;"></textarea>
+                </div>
+
+                <div style="width: 100%; text-align: left;">
+                    <label style="display: block; margin-bottom: 5px;">Send To</label>
+                    <select name="target" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                        <option value="ALL">All Students</option>
+                        <option value="UG">UG Only</option>
+                        <option value="PG">PG Only</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn-primary" style="align-self: center;">Publish Notice</button>
+            </form>
+        </div>
+    </div>
+</main>
+
+</body>
+</html>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin | Mess Dues</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/student.css">
+</head>
+
+<body>
+
+<header class="header">
+    <div class="header-content">
+        <div class="logo-section">
+            <h1 class="logo">🏠 Hostel Admin</h1>
+        </div>
+
+        <nav class="menu">
+            <a href="/admin/dashboard" class="nav-link"><span class="nav-icon">📋</span><span>Complaints</span></a>
+            <a href="/admin/applications" class="nav-link"><span class="nav-icon">📝</span><span>Applications</span></a>
+            <a href="/admin/mess-dues" class="nav-link"><span class="nav-icon">💳</span><span>Mess Dues</span></a>
+        </nav>
+
+        <div class="header-right">
+            <div class="profile">
+                <div class="profile-avatar"><span>A</span></div>
+                <div class="profile-info">
+                    <div class="profile-name">Admin</div>
+                </div>
+                <a href="/admin/logout" class="logout-btn" title="Logout">🚪</a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="dashboard-container">
+
+    <div class="content-section">
+        <div class="section-header">
+            <h2 class="section-title"><span class="title-icon">💳</span>Mess Dues</h2>
+            <a href="/admin/mess" class="btn-primary">Release Dues</a>
+        </div>
+
+        <!-- FILTER -->
+        <form method="GET" action="/admin/mess-dues" class="filter-form">
+            <label>Course</label>
+            <select name="course">
+                <option value="">-- Select --</option>
+                <option value="UG" <%= selectedCourse==="UG"?"selected":"" %>>UG</option>
+                <option value="PG" <%= selectedCourse==="PG"?"selected":"" %>>PG</option>
+            </select>
+            <button type="submit" class="btn-secondary">View Dues</button>
+        </form>
+
+        <% if (!selectedCourse) { %>
+            <p class="hint">Please select UG or PG to view mess dues.</p>
+        <% } %>
+
+        <% if (dues && dues.length > 0) { %>
+            <h3 style="margin-top:20px;">Mess Dues – <%= selectedCourse %></h3>
+            <table class="data-table">
+                <tr>
+                    <th>Student</th>
+                    <th>Enrollment</th>
+                    <th>Semester</th>
+                    <th>Month</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                    <th>Paid On</th>
+                </tr>
+                <% dues.forEach(d => { %>
+                <tr>
+                    <td><%= d.studentName %></td>
+                    <td><%= d.enrollment %></td>
+                    <td><%= d.semester || "-" %></td>
+                    <td><%= d.month %></td>
+                    <td>₹<%= d.amount %></td>
+                    <td class="<%= d.status === 'Paid' ? 'paid' : 'unpaid' %>"><%= d.status %></td>
+                    <td><%= d.paidOn ? new Date(d.paidOn).toDateString() : "-" %></td>
+                </tr>
+                <% }) %>
+            </table>
+        <% } else if (selectedCourse) { %>
+            <p>No dues found for this course.</p>
+        <% } %>
+    </div>
+
+</main>
+
+</body>
+</html>
+

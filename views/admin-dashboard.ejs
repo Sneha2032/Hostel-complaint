@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/student.css">
+</head>
+
+<body>
+
+<!-- HEADER (student theme applied for admin) -->
+<header class="header">
+    <div class="header-content">
+        <div class="logo-section">
+            <h1 class="logo">🏠 Hostel Admin</h1>
+        </div>
+
+        <nav class="menu">
+            <a href="/admin/dashboard" class="nav-link"><span class="nav-icon">📋</span><span>Complaints</span></a>
+            <a href="/admin/applications" class="nav-link"><span class="nav-icon">📝</span><span>Applications</span></a>
+            <a href="/admin/mess-dues" class="nav-link"><span class="nav-icon">💳</span><span>Mess Dues</span></a>
+            <a href="/admin/notice" class="nav-link"><span class="nav-icon">📢</span><span>Notices</span></a>
+            <a href="/admin/mess" class="nav-link btn-release"><span class="nav-icon">🚀</span><span>Release Dues</span></a>
+        </nav>
+
+        <div class="header-right">
+            <div class="profile">
+                <div class="profile-avatar"><span>A</span></div>
+                <div class="profile-info">
+                    <div class="profile-name">Admin</div>
+                    <div class="profile-details"><span class="profile-badge">⚙️ Manage</span></div>
+                </div>
+                <a href="/admin/logout" class="logout-btn" title="Logout">🚪</a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="dashboard-container">
+
+<!-- Complaints Section -->
+<div class="section">
+    <h2>Complaints</h2>
+    <table>
+    <tr>
+        <th>Student</th>
+        <th>Enroll</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Photo</th>
+        <th>Status</th>
+    </tr>
+
+    <% (complaints||[]).forEach(c => { %>
+    <tr>
+        <td><%= c.studentName %></td>
+        <td><%= c.enrollment %></td>
+        <td><%= c.type %></td>
+        <td><%= c.description %></td>
+        <td>
+            <% if (c.photo) { %>
+                <a href="<%= c.photo %>" target="_blank">
+                    <img src="<%= c.photo %>" alt="Complaint Photo" style="width:60px;height:60px;object-fit:cover;border-radius:6px;" />
+                </a>
+            <% } else { %>
+                No Photo
+            <% } %>
+        </td>
+        <td>
+            <form method="POST" action="/admin/update-status">
+                <input type="hidden" name="id" value="<%= c._id %>">
+                <select name="status" onchange="this.form.submit()">
+                    <option value="Pending" <%= c.status==="Pending"?"selected":"" %>>Pending</option>
+                    <option value="In Process" <%= c.status==="In Process"?"selected":"" %>>In Process</option>
+                    <option value="Solved" <%= c.status==="Solved"?"selected":"" %>>Solved</option>
+                </select>
+            </form>
+        </td>
+    </tr>
+    <% }) %>
+    </table>
+</div>
+
+<!-- Applications Section -->
+<div class="section">
+    <h2>Recent Applications</h2>
+    <% function fmtDate(d){ if(!d) return '-'; const dt = new Date(d); return isNaN(dt)? '-' : dt.toDateString(); } %>
+    <% if (!applications || applications.length === 0) { %>
+        <p>No applications yet. <a href="/admin/applications">View all</a></p>
+    <% } else { %>
+    <table>
+        <tr>
+            <th>Student</th>
+            <th>Enroll</th>
+            <th>Type</th>
+            <th>From</th>
+            <th>To</th>
+            <th>Status</th>
+        </tr>
+        <% applications.forEach(a => { %>
+        <tr>
+            <td><%= a.studentName %></td>
+            <td><%= a.enrollment %></td>
+            <td><%= a.type %></td>
+            <td><%= fmtDate(a.fromDate) %></td>
+            <td><%= fmtDate(a.toDate) %></td>
+            <td><%= a.status || 'Pending' %></td>
+        </tr>
+        <% }) %>
+    </table>
+    <% } %>
+</div>
+
+<!-- Mess Dues Summary -->
+<div class="section">
+    <h2>Mess Dues</h2>
+    <p>Total unpaid dues: <strong><%= (duesSummary && duesSummary.totalUnpaid) || 0 %></strong></p>
+    <p><a href="/admin/mess-dues">View all dues</a></p>
+
+    <% if (recentDues && recentDues.length) { %>
+    <h3>Recent Dues</h3>
+    <table>
+        <tr>
+            <th>Student</th>
+            <th>Enroll</th>
+            <th>Month</th>
+            <th>Amount</th>
+            <th>Status</th>
+        </tr>
+        <% recentDues.forEach(d => { %>
+        <tr>
+            <td><%= d.studentName %></td>
+            <td><%= d.enrollment %></td>
+            <td><%= d.month %></td>
+            <td>₹<%= d.amount %></td>
+            <td><%= d.status %></td>
+        </tr>
+        <% }) %>
+    </table>
+    <% } %>
+</div>
+</main>
+
+</body>
+</html>

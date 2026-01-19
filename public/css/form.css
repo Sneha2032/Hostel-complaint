@@ -1,0 +1,206 @@
+.form-card {
+    background: white;
+    padding: 30px;
+    border-radius: 14px;
+    width: 420px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+}
+
+.form-card h2 {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    font-weight: 600;
+    margin-top: 14px;
+    margin-bottom: 6px;
+}
+
+input, select, textarea {
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+
+textarea {
+    resize: none;
+}
+
+input[readonly] {
+    background: #f1f1f1;
+}
+
+.date-row {
+    display: flex;
+    gap: 15px;
+}
+
+.date-row div {
+    flex: 1;
+}
+
+button {
+    margin-top: 25px;
+    padding: 12px;
+    background: #0b2c4d;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #133b63;
+}
+/* ===== PAGE LAYOUT ===== */
+.page {
+    display: flex;
+    gap: 40px;
+    padding: 40px;
+    background: #f5f7fb;
+    min-height: 100vh;
+    box-sizing: border-box;
+}
+
+/* ===== COMMON CARD ===== */
+.card {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 25px 30px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+}
+
+/* LEFT FORM CARD */
+.form-card {
+    width: 35%;
+}
+
+/* RIGHT TABLE CARD */
+.table-card {
+    width: 65%;
+}
+
+/* ===== HEADINGS ===== */
+.card h2 {
+    margin-bottom: 20px;
+    color: #0b2c4d;
+    font-size: 22px;
+}
+
+/* ===== FORM ===== */
+form label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+    color: #333;
+}
+
+form input,
+form select,
+form textarea {
+    width: 100%;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    margin-bottom: 15px;
+    font-size: 14px;
+}
+
+form textarea {
+    resize: none;
+}
+
+/* DATE ROW */
+.date-row {
+    display: flex;
+    gap: 15px;
+}
+
+.date-row div {
+    width: 100%;
+}
+
+/* SUBMIT BUTTON */
+form button {
+    width: 100%;
+    padding: 12px;
+    background: #0b2c4d;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+form button:hover {
+    background: #143e6e;
+}
+
+/* ===== TABLE ===== */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+table th {
+    background: #0b2c4d;
+    color: white;
+    padding: 12px;
+    font-size: 14px;
+}
+
+table td {
+    padding: 12px;
+    border-bottom: 1px solid #e0e0e0;
+    text-align: center;
+    font-size: 14px;
+}
+
+table tr:hover {
+    background: #f1f4f9;
+}
+
+/* EMPTY STATE */
+.empty {
+    text-align: center;
+    color: #777;
+    padding: 20px;
+}
+
+/* ===== STATUS COLORS ===== */
+.status.pending {
+    color: #d35400;
+    font-weight: bold;
+}
+
+.status.approved {
+    color: #27ae60;
+    font-weight: bold;
+}
+
+.status.rejected {
+    color: #c0392b;
+    font-weight: bold;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 900px) {
+    .page {
+        flex-direction: column;
+    }
+
+    .form-card,
+    .table-card {
+        width: 100%;
+    }
+}

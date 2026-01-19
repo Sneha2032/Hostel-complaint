@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin - Release Mess Dues</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/student.css">
+</head>
+<body>
+
+<header class="header">
+    <div class="header-content">
+        <div class="logo-section">
+            <h1 class="logo">🏠 Hostel Admin</h1>
+        </div>
+
+        <nav class="menu">
+            <a href="/admin/dashboard" class="nav-link"><span class="nav-icon">📋</span><span>Complaints</span></a>
+            <a href="/admin/applications" class="nav-link"><span class="nav-icon">📝</span><span>Applications</span></a>
+            <a href="/admin/mess-dues" class="nav-link"><span class="nav-icon">💳</span><span>Mess Dues</span></a>
+        </nav>
+
+        <div class="header-right">
+            <div class="profile">
+                <div class="profile-avatar"><span>A</span></div>
+                <div class="profile-info">
+                    <div class="profile-name">Admin</div>
+                </div>
+                <a href="/admin/logout" class="logout-btn" title="Logout">🚪</a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="dashboard-container">
+    <div class="content-section">
+        <div class="section-header">
+            <h2 class="section-title"><span class="title-icon">💳</span>Release Mess Dues</h2>
+            <a href="/admin/dashboard" class="btn-secondary">Back</a>
+        </div>
+
+        <form method="POST" action="/admin/mess/release" class="form-grid">
+            <label>Course</label>
+            <select name="course">
+                <option value="UG">UG</option>
+                <option value="PG">PG</option>
+            </select>
+
+            <label>Month</label>
+            <input type="text" name="month" required>
+
+            <label>Amount</label>
+            <input type="number" name="amount" required>
+
+            <div></div>
+            <button type="submit" class="btn-primary">Release Dues</button>
+        </form>
+    </div>
+</main>
+
+</body>
+</html>

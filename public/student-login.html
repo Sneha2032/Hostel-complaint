@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Login</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/student-login.css">
+</head>
+
+<body>
+
+<div class="auth-page">
+    <!-- Theme background (purely UI; no backend changes) -->
+    <div class="auth-bg" aria-hidden="true">
+        <div class="auth-orb orb-1"></div>
+        <div class="auth-orb orb-2"></div>
+        <div class="auth-orb orb-3"></div>
+    </div>
+
+    <main class="auth-card" role="main">
+        <a class="back-link" href="/" aria-label="Back to home">← Home</a>
+
+        <div class="auth-header">
+            <div class="auth-icon" aria-hidden="true">👨‍🎓</div>
+            <h1 class="auth-title">Student Login</h1>
+            <p class="auth-subtitle">Welcome back — please sign in to continue.</p>
+        </div>
+
+        <!-- IMPORTANT: backend unchanged
+             - method POST
+             - action /login
+             - input names enrollment + password -->
+        <form class="auth-form" method="POST" action="/login">
+            <label class="field">
+                <span class="label">Enrollment Number</span>
+                <input type="text" name="enrollment" placeholder="e.g. 22BCS001" autocomplete="username" required>
+            </label>
+
+            <label class="field">
+                <span class="label">Password</span>
+                <input type="password" name="password" placeholder="Your password" autocomplete="current-password" required>
+            </label>
+
+            <button class="primary-btn" type="submit">Login</button>
+        </form>
+
+        <p class="auth-footer">
+            New student?
+            <a class="link" href="/student-signup.html">Create an account</a>
+        </p>
+    </main>
+</div>
+
+</body>
+</html>

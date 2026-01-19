@@ -1,0 +1,255 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/student.css">
+</head>
+
+<body>
+
+<!-- HEADER -->
+<header class="header">
+    <div class="header-content">
+        <div class="logo-section">
+            <h1 class="logo">🏠 Hostel Portal</h1>
+        </div>
+
+        <nav class="menu">
+            <a href="/mess" class="nav-link">
+                <span class="nav-icon">💳</span>
+                <span>Mess Dues</span>
+            </a>
+            <a href="/application" class="nav-link">
+                <span class="nav-icon">📝</span>
+                <span>Application</span>
+            </a>
+            <a href="/complaint" class="nav-link">
+                <span class="nav-icon">➕</span>
+                <span>New Complaint</span>
+            </a>
+        </nav>
+
+        <div class="header-right">
+            <!-- 🔔 Notifications -->
+            <div class="notif">
+                <button id="bell" class="bell-btn" aria-label="Notifications">
+                    <span class="bell-icon">🔔</span>
+                    <% if (notifications.length > 0) { %>
+                        <span id="notifCount" class="count"><%= notifications.length %></span>
+                    <% } %>
+                </button>
+
+                <div id="notifBox" class="notif-box">
+                    <div class="notif-header">
+                        <h3>Notifications</h3>
+                        <% if (notifications.length > 0) { %>
+                            <button id="markRead" class="mark-read-btn">Mark all as read</button>
+                        <% } %>
+                    </div>
+                    <div class="notif-list">
+                        <% if (notifications.length === 0) { %>
+                            <div class="empty-state">
+                                <span class="empty-icon">📭</span>
+                                <p class="empty">No new notifications</p>
+                            </div>
+                        <% } else { %>
+                            <% notifications.forEach(n => { %>
+                                <div class="notif-item">
+                                    <div class="notif-dot"></div>
+                                    <div class="notif-content">
+                                        <p class="notif-message"><%= n.message %></p>
+                                        <small class="notif-time"><%= new Date(n.date).toLocaleString() %></small>
+                                    </div>
+                                </div>
+                            <% }) %>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile -->
+            <div class="profile">
+                <div class="profile-avatar">
+                    <span><%= student.name.charAt(0).toUpperCase() %></span>
+                </div>
+                <div class="profile-info">
+                    <div class="profile-name"><%= student.name %></div>
+                    <div class="profile-details">
+                        <span class="profile-badge">📚 <%= student.dept %></span>
+                        <span class="profile-badge">🎓 <%= student.enrollment %></span>
+                    </div>
+                </div>
+                <a href="/logout" class="logout-btn" title="Logout">
+                    <span>🚪</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- CONTENT -->
+<main class="dashboard-container">
+    <!-- Stats Cards -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon complaints-icon">📋</div>
+            <div class="stat-content">
+                <div class="stat-value"><%= complaints.length %></div>
+                <div class="stat-label">Total Complaints</div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon pending-icon">⏳</div>
+            <div class="stat-content">
+                <div class="stat-value"><%= complaints.filter(c => c.status === 'Pending').length %></div>
+                <div class="stat-label">Pending</div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon process-icon">🔄</div>
+            <div class="stat-content">
+                <div class="stat-value"><%= complaints.filter(c => c.status === 'In Process').length %></div>
+                <div class="stat-label">In Process</div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon solved-icon">✅</div>
+            <div class="stat-content">
+                <div class="stat-value"><%= complaints.filter(c => c.status === 'Solved').length %></div>
+                <div class="stat-label">Solved</div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon notices-icon">📢</div>
+            <div class="stat-content">
+                <div class="stat-value"><%= notices.length %></div>
+                <div class="stat-label">Notices</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Complaints Section -->
+    <div class="content-section">
+        <div class="section-header">
+            <h2 class="section-title">
+                <span class="title-icon">📋</span>
+                Recent Complaints
+            </h2>
+            <a href="/complaint" class="btn-primary">
+                <span>➕</span>
+                New Complaint
+            </a>
+        </div>
+
+        <% if (complaints.length === 0) { %>
+            <div class="empty-complaints">
+                <div class="empty-icon-large">📭</div>
+                <h3>No Complaints Yet</h3>
+                <p>You haven't submitted any complaints. Click the button above to create your first complaint.</p>
+                <a href="/complaint" class="btn-primary">Create Complaint</a>
+            </div>
+        <% } else { %>
+            <div class="complaints-grid">
+                <% complaints.forEach(c => { %>
+                    <div class="complaint-card">
+                        <div class="complaint-header">
+                            <div class="complaint-id">#<%= c.id %></div>
+                            <span class="status-badge <%= 
+                                c.status === 'Pending' ? 'status-pending' :
+                                c.status === 'In Process' ? 'status-process' : 'status-solved'
+                            %>">
+                                <%= c.status === 'Pending' ? '⏳' : c.status === 'In Process' ? '🔄' : '✅' %>
+                                <%= c.status %>
+                            </span>
+                        </div>
+                        <div class="complaint-body">
+                            <div class="complaint-type">
+                                <span class="type-icon">🏷️</span>
+                                <span><%= c.type %></span>
+                            </div>
+                            <p class="complaint-description"><%= c.description %></p>
+                        </div>
+                        <div class="complaint-footer">
+                            <small class="complaint-date">
+                                📅 <%= new Date(c.createdAt || c.date || Date.now()).toLocaleDateString() %>
+                            </small>
+                        </div>
+                    </div>
+                <% }) %>
+            </div>
+        <% } %>
+    </div>
+
+    <!-- Notices Section -->
+    <div class="content-section">
+        <div class="section-header">
+            <h2 class="section-title">
+                <span class="title-icon">📢</span>
+                Recent Notices
+            </h2>
+        </div>
+
+        <% if (!notices || notices.length === 0) { %>
+            <div class="empty-complaints">
+                <div class="empty-icon-large">📭</div>
+                <h3>No Notices Yet</h3>
+                <p>No notices have been posted yet.</p>
+            </div>
+        <% } else { %>
+            <div class="complaints-grid">
+                <% notices.forEach(n => { %>
+                    <div class="complaint-card">
+                        <div class="complaint-header">
+                            <div class="complaint-id">#<%= n._id.toString().slice(-4) %></div>
+                        </div>
+                        <div class="complaint-body">
+                            <div class="complaint-type">
+                                <span class="type-icon">📢</span>
+                                <span><%= n.title %></span>
+                            </div>
+                            <p class="complaint-description"><%= n.message %></p>
+                        </div>
+                        <div class="complaint-footer">
+                            <small class="complaint-date">
+                                📅 <%= new Date(n.createdAt).toLocaleDateString() %>
+                            </small>
+                        </div>
+                    </div>
+                <% }) %>
+            </div>
+        <% } %>
+    </div>
+</main>
+
+<script>
+const bell = document.getElementById("bell");
+const box = document.getElementById("notifBox");
+const markRead = document.getElementById("markRead");
+
+// Toggle notifications
+bell.onclick = (e) => {
+    e.stopPropagation();
+    box.classList.toggle("show");
+};
+
+// Close notifications when clicking outside
+document.addEventListener("click", (e) => {
+    if (!e.target.closest(".notif")) {
+        box.classList.remove("show");
+    }
+});
+
+// Mark all as read
+if (markRead) {
+    markRead.onclick = async () => {
+        await fetch("/notifications/read", { method: "POST" });
+        location.reload();
+    };
+}
+</script>
+
+</body>
+</html>
