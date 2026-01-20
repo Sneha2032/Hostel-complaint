@@ -2,7 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const session = require("express-session");
-const MongoStore = require('connect-mongo');
+const MongoStore = require('connect-mongo')(session);
 const bodyParser = require("body-parser");
 const multer = require("multer");
 const path = require("path");
@@ -42,7 +42,7 @@ app.use(
         secret: process.env.SESSION_SECRET,
         resave: false,
         saveUninitialized: false,
-        store: MongoStore.create({ mongoUrl: process.env.MONGO_URI })
+        store: new MongoStore({ url: process.env.MONGO_URI })
     })
 );
 
