@@ -68,47 +68,57 @@ app.get("/", (req, res) => {
    STUDENT AUTH
 ======================= */
 app.post("/signup", async (req, res) => {
-    const {
-        name,
-        dept,
-        course,
-        admissionYear,
-        mobile,
-        email,
-        room,
-        enrollment,
-        password
-    } = req.body;
+    try {
+        const {
+            name,
+            dept,
+            course,
+            admissionYear,
+            mobile,
+            email,
+            room,
+            enrollment,
+            password
+        } = req.body;
 
-    // prevent duplicate enrollment
-    const exists = await Student.findOne({ enrollment });
-    if (exists) return res.send("Student already registered");
+        // prevent duplicate enrollment
+        const exists = await Student.findOne({ enrollment });
+        if (exists) return res.send("Student already registered");
 
-    const student = new Student({
-        name,
-        dept,
-        course,
-        admissionYear,
-        mobile,
-        email,
-        room,
-        enrollment,
-        password
-    });
+        const student = new Student({
+            name,
+            dept,
+            course,
+            admissionYear,
+            mobile,
+            email,
+            room,
+            enrollment,
+            password
+        });
 
-    await student.save();
-    res.redirect("/student-login.html");
+        await student.save();
+        res.redirect("/student-login.html");
+    } catch (error) {
+        console.error("Signup error:", error);
+        res.status(500).send("Internal server error");
+    }
 });
 
 
 app.post("/login", async (req, res) => {
-    const { enrollment, password } = req.body;
+    try {
+        const { enrollment, password } = req.body;
 
-    const student = await Student.findOne({ enrollment, password });
-    if (!student) return res.send("Invalid credentials");
+        const student = await Student.findOne({ enrollment, password });
+        if (!student) return res.send("Invalid credentials");
 
-    req.session.student = student;
-    res.redirect("/dashboard");
+        req.session.student = student;
+        res.redirect("/dashboard");
+    } catch (error) {
+        console.error("Login error:", error);
+        res.status(500).send("Internal server error");
+    }
 });
 
 app.get("/logout", (req, res) => {
@@ -119,33 +129,38 @@ app.get("/logout", (req, res) => {
    STUDENT DASHBOARD
 ======================= */
 app.get("/dashboard", async (req, res) => {
-    if (!req.session.student) return res.redirect("/student-login.html");
+    try {
+        if (!req.session.student) return res.redirect("/student-login.html");
 
-    const complaints = await Complaint.find({
-        enrollment: req.session.student.enrollment
-    });
+        const complaints = await Complaint.find({
+            enrollment: req.session.student.enrollment
+        });
 
-    const notifications = await Notification.find({
-        enrollment: req.session.student.enrollment,
-        isRead: false
-    });
+        const notifications = await Notification.find({
+            enrollment: req.session.student.enrollment,
+            isRead: false
+        });
 
-    const notices = await Notice.find({
-        $or: [
-            { target: "ALL" },
-            { target: req.session.student.course }
-        ]
-    }).sort({ createdAt: -1 }).limit(10);  // Fetch relevant notices
+        const notices = await Notice.find({
+            $or: [
+                { target: "ALL" },
+                { target: req.session.student.course }
+            ]
+        }).sort({ createdAt: -1 }).limit(10);  // Fetch relevant notices
 
-    console.log("Student course:", req.session.student.course);
-    console.log("Fetched notices:", notices.length);
+        console.log("Student course:", req.session.student.course);
+        console.log("Fetched notices:", notices.length);
 
-    res.render("student-dashboard", {
-        student: req.session.student,
-        complaints,
-        notifications,
-        notices
-    });
+        res.render("student-dashboard", {
+            student: req.session.student,
+            complaints,
+            notifications,
+            notices
+        });
+    } catch (error) {
+        console.error("Dashboard error:", error);
+        res.status(500).send("Internal server error");
+    }
 });
 
 /* =======================
