@@ -2,7 +2,6 @@ require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const session = require("express-session");
-const MongoStore = require('connect-mongo');
 const bodyParser = require("body-parser");
 const multer = require("multer");
 const path = require("path");
@@ -41,8 +40,7 @@ app.use(
     session({
         secret: process.env.SESSION_SECRET,
         resave: false,
-        saveUninitialized: false,
-        store: new MongoStore({ mongooseConnection: mongoose.connection })
+        saveUninitialized: false
     })
 );
 
