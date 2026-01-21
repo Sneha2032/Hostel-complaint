@@ -65,6 +65,24 @@ app.get("/", (req, res) => {
 });
 
 /* =======================
+   SEED ADMIN (Initialize admin user)
+======================= */
+app.get("/seed-admin", async (req, res) => {
+    try {
+        const existingAdmin = await Admin.findOne({ username: "admin" });
+        if (existingAdmin) {
+            return res.send("Admin already exists!");
+        }
+
+        await Admin.create({ username: "admin", password: "admin123" });
+        res.send("✅ Admin user created successfully! Username: admin, Password: admin123");
+    } catch (error) {
+        console.error("Seed admin error:", error);
+        res.status(500).send("Error creating admin: " + error.message);
+    }
+});
+
+/* =======================
    STUDENT AUTH
 ======================= */
 app.post("/signup", async (req, res) => {
