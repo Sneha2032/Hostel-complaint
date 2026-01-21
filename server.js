@@ -218,13 +218,18 @@ app.post("/application", async (req, res) => {
    ADMIN AUTH
 ======================= */
 app.post("/admin/login", async (req, res) => {
-    const { username, password } = req.body;
+    try {
+        const { username, password } = req.body;
 
-    const admin = await Admin.findOne({ username, password });
-    if (!admin) return res.send("Invalid admin credentials");
+        const admin = await Admin.findOne({ username, password });
+        if (!admin) return res.send("Invalid admin credentials");
 
-    req.session.admin = admin;
-    res.redirect("/admin/dashboard");
+        req.session.admin = admin;
+        res.redirect("/admin/dashboard");
+    } catch (error) {
+        console.error("Admin login error:", error);
+        res.status(500).send("Internal Server Error: " + error.message);
+    }
 });
 
 app.get("/admin/logout", (req, res) => {
