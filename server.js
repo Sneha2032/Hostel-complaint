@@ -240,70 +240,90 @@ app.get("/admin/logout", (req, res) => {
    ADMIN DASHBOARD
 ======================= */
 app.get("/admin/dashboard", async (req, res) => {
-    if (!req.session.admin) return res.redirect("/admin-login.html");
+    try {
+        if (!req.session.admin) return res.redirect("/admin-login.html");
 
-    // Complaints
-    const complaints = await Complaint.find().sort({ createdAt: -1 }).limit(50);
+        // Complaints
+        const complaints = await Complaint.find().sort({ createdAt: -1 }).limit(50);
 
-    // Recent applications (show latest 10)
-    const applications = await Application.find().sort({ createdAt: -1 }).limit(10);
+        // Recent applications (show latest 10)
+        const applications = await Application.find().sort({ createdAt: -1 }).limit(10);
 
-    // Mess due summary: total unpaid and recent dues
-    const totalUnpaidDues = await MessDue.countDocuments({ status: "Unpaid" });
-    const recentDues = await MessDue.find().sort({ createdAt: -1 }).limit(5);
+        // Mess due summary: total unpaid and recent dues
+        const totalUnpaidDues = await MessDue.countDocuments({ status: "Unpaid" });
+        const recentDues = await MessDue.find().sort({ createdAt: -1 }).limit(5);
 
-    res.render("admin-dashboard", {
-        complaints,
-        applications,
-        duesSummary: { totalUnpaid: totalUnpaidDues },
-        recentDues
-    });
+        res.render("admin-dashboard", {
+            complaints,
+            applications,
+            duesSummary: { totalUnpaid: totalUnpaidDues },
+            recentDues
+        });
+    } catch (error) {
+        console.error("Admin dashboard error:", error);
+        res.status(500).send("Error loading dashboard: " + error.message);
+    }
 });
 
 /* =======================
    ADMIN UPDATE COMPLAINT
 ======================= */
 app.post("/admin/update-status", async (req, res) => {
-    const { id, status } = req.body;
+    try {
+        const { id, status } = req.body;
 
-    const complaint = await Complaint.findById(id);
-    complaint.status = status;
-    await complaint.save();
+        const complaint = await Complaint.findById(id);
+        complaint.status = status;
+        await complaint.save();
 
-    // 🔔 notify student
-    await Notification.create({
-        enrollment: complaint.enrollment,
-        message: `Your complaint is now ${status}`
-    });
+        // 🔔 notify student
+        await Notification.create({
+            enrollment: complaint.enrollment,
+            message: `Your complaint is now ${status}`
+        });
 
-    res.redirect("/admin/dashboard");
+        res.redirect("/admin/dashboard");
+    } catch (error) {
+        console.error("Update complaint error:", error);
+        res.status(500).send("Error updating complaint: " + error.message);
+    }
 });
 
 /* =======================
    ADMIN APPLICATIONS
 ======================= */
 app.get("/admin/applications", async (req, res) => {
-    if (!req.session.admin) return res.redirect("/admin-login.html");
+    try {
+        if (!req.session.admin) return res.redirect("/admin-login.html");
 
-    const applications = await Application.find();
-    res.render("admin-applications", { applications });
+        const applications = await Application.find();
+        res.render("admin-applications", { applications });
+    } catch (error) {
+        console.error("Admin applications error:", error);
+        res.status(500).send("Error loading applications: " + error.message);
+    }
 });
 
 app.post("/admin/update-application", async (req, res) => {
-    const { id, status, adminRemark } = req.body;
+    try {
+        const { id, status, adminRemark } = req.body;
 
-    const application = await Application.findById(id);
-    application.status = status;
-    application.adminRemark = adminRemark;
-    await application.save();
+        const application = await Application.findById(id);
+        application.status = status;
+        application.adminRemark = adminRemark;
+        await application.save();
 
-    // 🔔 notify student
-    await Notification.create({
-        enrollment: application.enrollment,
-        message: `Your ${application.type} application was ${status}. ${adminRemark || ""}`
-    });
+        // 🔔 notify student
+        await Notification.create({
+            enrollment: application.enrollment,
+            message: `Your ${application.type} application was ${status}. ${adminRemark || ""}`
+        });
 
-    res.redirect("/admin/applications");
+        res.redirect("/admin/applications");
+    } catch (error) {
+        console.error("Update application error:", error);
+        res.status(500).send("Error updating application: " + error.message);
+    }
 });
 
 /* =======================
@@ -362,33 +382,38 @@ app.get("/mess", async (req, res) => {
 });
 
 app.post("/admin/mess/release", async (req, res) => {
-    if (!req.session.admin)
-        return res.redirect("/admin-login.html");
+    try {
+        if (!req.session.admin)
+            return res.redirect("/admin-login.html");
 
-    const { course, month, amount } = req.body;
+        const { course, month, amount } = req.body;
 
-    const students = await Student.find({ course });
+        const students = await Student.find({ course });
 
-    for (let s of students) {
+        for (let s of students) {
 
-        // 1️⃣ Create mess due
-        await MessDue.create({
-            enrollment: s.enrollment,
-            studentName: s.name,
-            semester: "Auto",
-            month,
-            amount,
-            status: "Unpaid"
-        });
+            // 1️⃣ Create mess due
+            await MessDue.create({
+                enrollment: s.enrollment,
+                studentName: s.name,
+                semester: "Auto",
+                month,
+                amount,
+                status: "Unpaid"
+            });
 
-        // 2️⃣ Create notification
-        await Notification.create({
-            enrollment: s.enrollment,
-            message: `New mess dues of ₹${amount} for ${month} have been released.`
-        });
+            // 2️⃣ Create notification
+            await Notification.create({
+                enrollment: s.enrollment,
+                message: `New mess dues of ₹${amount} for ${month} have been released.`
+            });
+        }
+
+        res.redirect("/admin/mess-dues");
+    } catch (error) {
+        console.error("Mess release error:", error);
+        res.status(500).send("Error releasing mess dues: " + error.message);
     }
-
-    res.redirect("/admin/mess-dues");
 });
 
 // Render release dues form for admin
@@ -404,26 +429,31 @@ app.get("/admin/mess", async (req, res) => {
 // const MessDue = require("../models/MessDue");
 
 app.get("/admin/mess-dues", async (req, res) => {
-    if (!req.session.admin)
-        return res.redirect("/admin-login.html");
+    try {
+        if (!req.session.admin)
+            return res.redirect("/admin-login.html");
 
-    const { course } = req.query;
+        const { course } = req.query;
 
-    let dues = [];
+        let dues = [];
 
-    if (course) {
-        const students = await Student.find({ course });
-        const enrollments = students.map(s => s.enrollment);
+        if (course) {
+            const students = await Student.find({ course });
+            const enrollments = students.map(s => s.enrollment);
 
-        dues = await MessDue.find({
-            enrollment: { $in: enrollments }
-        }).sort({ createdAt: -1 });
+            dues = await MessDue.find({
+                enrollment: { $in: enrollments }
+            }).sort({ createdAt: -1 });
+        }
+
+        res.render("admin-mess-dues", {
+            dues,
+            selectedCourse: course
+        });
+    } catch (error) {
+        console.error("Mess dues error:", error);
+        res.status(500).send("Error loading mess dues: " + error.message);
     }
-
-    res.render("admin-mess-dues", {
-        dues,
-        selectedCourse: course
-    });
 });
 
 app.get("/payment/:id", async (req, res) => {
@@ -469,18 +499,23 @@ app.get("/admin/notice", (req, res) => {
     res.render("admin-notice");
 });
 app.post("/admin/notice", async (req, res) => {
-    if (!req.session.admin)
-        return res.redirect("/admin-login.html");
+    try {
+        if (!req.session.admin)
+            return res.redirect("/admin-login.html");
 
-    const { title, message, target } = req.body;
+        const { title, message, target } = req.body;
 
-    await Notice.create({
-        title,
-        message,
-        target
-    });
+        await Notice.create({
+            title,
+            message,
+            target
+        });
 
-    res.redirect("/admin/dashboard");
+        res.redirect("/admin/dashboard");
+    } catch (error) {
+        console.error("Notice creation error:", error);
+        res.status(500).send("Error creating notice: " + error.message);
+    }
 });
 
 
