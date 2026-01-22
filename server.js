@@ -7,6 +7,8 @@ const multer = require("multer");
 const path = require("path");
 // const MessDue = require("./models/MessDue");
 const Notice=require("./models/Notice");
+const cloudinary=require("./config/cloudinary");
+const {CloudinaryStorage}=require("multer-storage-cloudinary");
 
 const app = express();
 
@@ -47,15 +49,16 @@ app.use(
 /* =======================
    MULTER (FILE UPLOAD)
 ======================= */
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, "public/uploads");
-    },
-    filename: (req, file, cb) => {
-        cb(null, Date.now() + "-" + file.originalname);
-    }
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: "hostel-complaints",
+    allowed_formats: ["jpg", "jpeg", "png"]
+  }
 });
+
 const upload = multer({ storage });
+
 
 /* =======================
    HOME
@@ -65,22 +68,22 @@ app.get("/", (req, res) => {
 });
 
 /* =======================
-   SEED ADMIN (Initialize admin user)
-======================= */
-app.get("/seed-admin", async (req, res) => {
-    try {
-        const existingAdmin = await Admin.findOne({ username: "admin" });
-        if (existingAdmin) {
-            return res.send("Admin already exists!");
-        }
+//    SEED ADMIN (Initialize admin user)
+// ======================= */
+// app.get("/seed-admin", async (req, res) => {
+//     try {
+//         const existingAdmin = await Admin.findOne({ username: "admin" });
+//         if (existingAdmin) {
+//             return res.send("Admin already exists!");
+//         }
 
-        await Admin.create({ username: "admin", password: "admin123" });
-        res.send("✅ Admin user created successfully! Username: admin, Password: admin123");
-    } catch (error) {
-        console.error("Seed admin error:", error);
-        res.status(500).send("Error creating admin: " + error.message);
-    }
-});
+//         await Admin.create({ username: "admin", password: "admin123" });
+//         res.send("✅ Admin user created successfully! Username: admin, Password: admin123");
+//     } catch (error) {
+//         console.error("Seed admin error:", error);
+//         res.status(500).send("Error creating admin: " + error.message);
+//     }
+// });
 
 /* =======================
    STUDENT AUTH
@@ -195,7 +198,8 @@ app.post("/complaint", upload.single("photo"), async (req, res) => {
         enrollment: req.session.student.enrollment,
         type: req.body.type,
         description: req.body.description,
-        photo: req.file ? "/uploads/" + req.file.filename : null
+        photo: req.file ? req.file.path : null
+
     });
 
     await complaint.save();
@@ -523,18 +527,40 @@ app.post("/admin/notice", async (req, res) => {
 
         const { title, message, target } = req.body;
 
+        // ✅ store notice with date
         await Notice.create({
             title,
             message,
-            target
+            target,
+            createdAt: new Date()   // 👈 DATE STORED HERE
         });
 
+        // 🔔 send notification to students based on target
+        let students = [];
+
+        if (target === "ALL") {
+            students = await Student.find({});
+        } else {
+            students = await Student.find({ course: target }); // UG / PG
+        }
+
+        for (let s of students) {
+            await Notification.create({
+                enrollment: s.enrollment,
+                message: `📢 ${title}: ${message}`,
+                date: new Date()     // 👈 DATE STORED HERE ALSO
+            });
+        }
+
         res.redirect("/admin/dashboard");
+
     } catch (error) {
         console.error("Notice creation error:", error);
         res.status(500).send("Error creating notice: " + error.message);
     }
 });
+
+
 
 
 /* =======================
